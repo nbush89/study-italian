@@ -1,0 +1,32 @@
+import { NextResponse, type NextRequest } from "next/server";
+
+/** Single-user HTTP basic auth over the whole app. Set APP_USER and APP_PASSWORD. */
+export function middleware(req: NextRequest) {
+  const user = process.env.APP_USER;
+  const pass = process.env.APP_PASSWORD;
+  if (!user || !pass) {
+    return new NextResponse("APP_USER and APP_PASSWORD must be set.", { status: 500 });
+  }
+
+  const header = req.headers.get("authorization");
+  if (header?.startsWith("Basic ")) {
+    try {
+      const decoded = atob(header.slice(6));
+      const sep = decoded.indexOf(":");
+      if (sep !== -1 && decoded.slice(0, sep) === user && decoded.slice(sep + 1) === pass) {
+        return NextResponse.next();
+      }
+    } catch {
+      // malformed header: fall through to 401
+    }
+  }
+
+  return new NextResponse("Authentication required.", {
+    status: 401,
+    headers: { "WWW-Authenticate": 'Basic realm="Italian vocab", charset="UTF-8"' },
+  });
+}
+
+export const config = {
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+};
