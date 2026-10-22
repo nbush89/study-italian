@@ -9,9 +9,8 @@ Stack: Next.js (App Router) + TypeScript, Neon Postgres via `@neondatabase/serve
 1. **Database.** In your Neon project, open the SQL editor and run `db/schema.sql`. The file is safe to re-run: after pulling schema changes (like topics), run the whole file again and it only adds what's missing.
 2. **Environment.** Copy `.env.example` to `.env.local` and fill in:
    - `DATABASE_URL`: the pooled Neon connection string
-   - `APP_USER` / `APP_PASSWORD`: the login for the app (HTTP basic auth over the whole site)
 3. **Run locally.** `npm install`, then `npm run dev`.
-4. **Deploy.** Import the repo in Vercel and add the same three environment variables. On your phone, open the site and use "Add to Home Screen."
+4. **Deploy.** Import the repo in Vercel and add the same `DATABASE_URL` environment variable. On your phone, open the site and use "Add to Home Screen."
 
 ## How scheduling works
 
@@ -53,4 +52,3 @@ Words can be tagged with any number of topics (travel, cooking…) picked from a
 - `app/actions.ts`: server actions (create/update/delete word, reset progress, record review)
 - `app/review/page.tsx` + `components/ReviewSession.tsx`: review flow
 - `app/words/…`: word list, add, edit
-- `middleware.ts`: basic auth
